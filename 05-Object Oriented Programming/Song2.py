@@ -17,16 +17,16 @@ class Song(object):
         self._title = title
         self.duration = duration
 
-    def get_title(self):
+    def _get_title(self):
         return self._title
 
-    def set_title(self, title):
+    def _set_title(self, title):
         self._title = title
 
-    def del_title(self):
+    def _del_title(self):
         del self._title
 
-    title = property(get_title, set_title, del_title)
+    title = property(_get_title, _set_title, _del_title)
 
     def __eq__(self, other):
         return self.title == other.title and self.duration == other.duration
