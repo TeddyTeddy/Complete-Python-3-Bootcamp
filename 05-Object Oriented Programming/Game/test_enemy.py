@@ -80,7 +80,6 @@ class TestEnemy(unittest.TestCase):
         enemy = Enemy()  # test with default init values: name="Enemy", hit_points=0, lives=1
         self.assertEqual(enemy.lives, 1)
         self.assertEqual(enemy.name, 'Enemy')
-        self.assertEqual(enemy.hit_points_per_live, 0)
         self.assertEqual(enemy.hit_points, 0)
 
     def test_enemy_take_damage_1(self):

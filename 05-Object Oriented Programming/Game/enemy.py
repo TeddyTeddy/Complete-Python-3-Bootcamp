@@ -5,7 +5,7 @@ class Enemy:
     def __init__(self, name="Enemy", hit_points=0, lives=1):  # optional named parameters in __init__ method
         self.name = name
         self.hit_points = hit_points
-        self.hit_points_per_live = hit_points
+        self.__hit_points_per_life = hit_points
         self.lives = lives
 
     @property
@@ -33,15 +33,15 @@ class Enemy:
     def _get_lives_lost(self, damage):
         """
         Given damage, this method returns the number of lives lost. Each life holds
-        hit_points_per_live. Each time a damage is taken a number of live(s)
+        __hit_points_per_life. Each time a damage is taken a number of live(s)
         containing hit-points are taken away as much as damage can eat lives
         :param damage (int) : Can be any non-negative number
         :return (int): lives_lost
         """
         lives_lost = 0
-        if damage >= self.hit_points_per_live:
-            lives_lost = damage//self.hit_points_per_live
-        else:  # damage < self.hit_points_per_live
+        if damage >= self.__hit_points_per_life:
+            lives_lost = damage//self.__hit_points_per_life
+        else:  # damage < self.__hit_points_per_life
             if self.hit_points - damage >= 0:
                 lives_lost = 0    # damage does not break the next lives ceiling
             else:
@@ -49,7 +49,7 @@ class Enemy:
         return lives_lost
 
     def _get_total_hit_points(self):
-        return ((self.lives-1)*self.hit_points_per_live) + self.hit_points
+        return ((self.lives-1) * self.__hit_points_per_life) + self.hit_points
 
     def _get_hit_points_remaining(self, lives_lost, damage):
         remaining_hit_points = 0
@@ -57,8 +57,8 @@ class Enemy:
             # calculate total remaining hit points after lives_lost
             remaining_hit_points = self._get_total_hit_points() - damage
             # calculate remaining hit points considering the lives to be left
-            while remaining_hit_points >= self.hit_points_per_live:
-                remaining_hit_points -= self.hit_points_per_live
+            while remaining_hit_points >= self.__hit_points_per_life:
+                remaining_hit_points -= self.__hit_points_per_life
         return remaining_hit_points
 
     def take_damage(self, damage):
@@ -74,7 +74,7 @@ class Enemy:
         return f'Name: {self.name}, Lives: {self.lives}, hit points: {self.hit_points}'
 
     def __eq__(self, other):
-        return self.name == other.name and self.hit_points_per_live == other.hit_points_per_live and self.hit_points == other.hit_points and set.lives == other.lives
+        return self.name == other.name and self.__hit_points_per_life == other.hit_points_per_live and self.hit_points == other.hit_points and set.lives == other.lives
 
     def __ne__(self, other):
         return not self.__eq__(other)
