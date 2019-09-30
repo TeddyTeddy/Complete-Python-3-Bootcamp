@@ -1,5 +1,5 @@
 from player import Player
-from enemy import Enemy, Troll
+from enemy import Enemy, Troll, Vampyre
 
 tim = Player('Tim')
 
@@ -22,6 +22,29 @@ print(f'Another troll {another_troll}')
 
 brother_troll = Troll('Urg')  # note that it takes 2 arguments. Calls Enemy.__init__
 print(f'Brother troll {brother_troll}')
+
+ugly_troll.grunt()
+another_troll.grunt()
+brother_troll.grunt()
+
+ugly_troll.take_damage(23)
+print(ugly_troll)
+ugly_troll.take_damage(1)
+print(ugly_troll)
+ugly_troll.take_damage(1)
+print(ugly_troll)
+
+drakula = Vampyre('Drakula')
+print(drakula)
+drakula.take_damage(50)
+print(drakula)
+drakula.take_damage(8)
+print(drakula)
+drakula.take_damage(15)
+print(drakula)
+drakula.take_damage(15)
+print(drakula)
+
 #
 # print(tim.name)
 # print(tim.lives)
