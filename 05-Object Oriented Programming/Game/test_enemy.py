@@ -17,7 +17,7 @@ class TestVampyre(unittest.TestCase):
     def test_vampyre_take_damage_2(self):
         vampyre = Vampyre('Drakula')  # hit_points=12, lives=3
         vampyre.take_damage(24)
-        self.assertEqual(vampyre.hit_points, 0)
+        self.assertEqual(vampyre.hit_points, 12)
         self.assertEqual(vampyre.lives, 1)
 
     def test_vampyre_take_damage_3(self):
@@ -28,6 +28,7 @@ class TestVampyre(unittest.TestCase):
         vampyre.take_damage(17)
         self.assertEqual(vampyre.hit_points, 0)
         self.assertEqual(vampyre.lives, 0)
+
 
 class TestTroll(unittest.TestCase):
     def test_troll_default_init(self):
@@ -44,7 +45,7 @@ class TestTroll(unittest.TestCase):
 
         troll.take_damage(13)
         self.assertEqual(troll.hit_points, 0)
-        self.assertEqual(troll.lives, 1)
+        self.assertEqual(troll.lives, 0)
 
         troll.take_damage(5)
         self.assertEqual(troll.hit_points, 0)
@@ -89,12 +90,12 @@ class TestEnemy(unittest.TestCase):
         self.assertEqual(enemy.hit_points, 6)
 
         enemy.take_damage(damage=6)
-        self.assertEqual(enemy.lives, 3)
-        self.assertEqual(enemy.hit_points, 0)
+        self.assertEqual(enemy.lives, 2)
+        self.assertEqual(enemy.hit_points, 30)
 
         enemy.take_damage(damage=30)
-        self.assertEqual(enemy.lives, 2)
-        self.assertEqual(enemy.hit_points, 0)
+        self.assertEqual(enemy.lives, 1)
+        self.assertEqual(enemy.hit_points, 30)
 
         enemy.take_damage(damage=5)
         self.assertEqual(enemy.lives, 1)
@@ -105,7 +106,7 @@ class TestEnemy(unittest.TestCase):
         self.assertEqual(enemy.hit_points, 18)
 
         enemy.take_damage(damage=18)
-        self.assertEqual(enemy.lives, 1)
+        self.assertEqual(enemy.lives, 0)
         self.assertEqual(enemy.hit_points, 0)
 
         enemy.take_damage(damage=1)
@@ -138,11 +139,11 @@ class TestEnemy(unittest.TestCase):
         enemy = Enemy(hit_points=12, lives=5)
         enemy.take_damage(24)
         self.assertEqual(enemy.lives, 3)
-        self.assertEqual(enemy.hit_points, 0)
+        self.assertEqual(enemy.hit_points, 12)
 
         enemy.take_damage(24)
         self.assertEqual(enemy.lives, 1)
-        self.assertEqual(enemy.hit_points, 0)
+        self.assertEqual(enemy.hit_points, 12)
 
         enemy.take_damage(12)
         self.assertEqual(enemy.lives, 0)

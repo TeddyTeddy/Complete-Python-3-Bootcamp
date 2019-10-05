@@ -30,45 +30,24 @@ class Enemy:
             raise AssertionError
         self._lives = lives
 
-    def _get_lives_lost(self, damage):
-        """
-        Given damage, this method returns the number of lives lost. Each life holds
-        __hit_points_per_life. Each time a damage is taken a number of live(s)
-        containing hit-points are taken away as much as damage can eat lives
-        :param damage (int) : Can be any non-negative number
-        :return (int): lives_lost
-        """
-        lives_lost = 0
-        if damage >= self.__hit_points_per_life:
-            lives_lost = damage//self.__hit_points_per_life
-        else:  # damage < self.__hit_points_per_life
-            if self.hit_points - damage >= 0:
-                lives_lost = 0    # damage does not break the next lives ceiling
-            else:
-                lives_lost = 1    # damage breaks the next lives ceiling
-        return lives_lost
-
     def _get_total_hit_points(self):
         return ((self.lives-1) * self.__hit_points_per_life) + self.hit_points
 
-    def _get_hit_points_remaining(self, lives_lost, damage):
-        remaining_hit_points = 0
-        if self.lives - lives_lost > 0:  # there will be some live(s) left
-            # calculate total remaining hit points after lives_lost
-            remaining_hit_points = self._get_total_hit_points() - damage
-            # calculate remaining hit points considering the lives to be left
-            while remaining_hit_points >= self.__hit_points_per_life:
-                remaining_hit_points -= self.__hit_points_per_life
-        return remaining_hit_points
-
     def take_damage(self, damage):
-        lives_lost = self._get_lives_lost(damage)
-        hit_points_remaining = self._get_hit_points_remaining(lives_lost, damage)
-        if self.lives - lives_lost >= 0:
-            self.lives -= lives_lost
-        else:
-            self.lives = 0  # damage is too big, it killed the enemy immediately
-        self.hit_points = hit_points_remaining
+        total_hit_points = self._get_total_hit_points()
+        remaining_hit_points = total_hit_points - damage
+        if remaining_hit_points <= 0:
+            # damage was too big to kill the instance
+            self.lives = 0
+            self.hit_points = 0
+        else: # there are remaining hit points, calculate lives and hit_points
+            if remaining_hit_points % self.__hit_points_per_life == 0:
+                # remaining_hit_points are a multiple of hit_points_per_life
+                self.lives = remaining_hit_points // self.__hit_points_per_life
+                self.hit_points = self.__hit_points_per_life
+            else:
+                self.lives = (remaining_hit_points // self.__hit_points_per_life) + 1
+                self.hit_points = remaining_hit_points % self.__hit_points_per_life
 
     def __str__(self):
         return f'Name: {self.name}, Lives: {self.lives}, hit points: {self.hit_points}'
