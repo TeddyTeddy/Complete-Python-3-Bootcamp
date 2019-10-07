@@ -83,3 +83,12 @@ class Vampyre(Enemy):
             super().take_damage(damage)
 
 
+class VampyreKing(Vampyre):
+    def __init__(self, name):
+        Enemy.__init__(self, name=name, hit_points=140, lives=3)
+
+    def take_damage(self, damage):
+        damage = damage // 4
+        Enemy.take_damage(self, damage=damage)
+
+

@@ -1,6 +1,37 @@
 import unittest
-from enemy import Enemy, Troll, Vampyre
+from enemy import Enemy, Troll, Vampyre, VampyreKing
 
+class TestVampyreKing(unittest.TestCase):
+    def test_vampyre_king_default_init(self):
+        vampyre_king = VampyreKing('Vampire King')
+        self.assertEqual(vampyre_king.hit_points, 140)
+        self.assertEqual(vampyre_king.lives, 3)
+
+    def test_vampyre_king_take_damage(self):
+        from random import randint
+        vampyre_king = VampyreKing('Vampire King')
+        while vampyre_king.lives != 0:
+            damage = randint(1, 140)
+            lives_b4 = vampyre_king.lives
+            hit_points_b4 = vampyre_king.hit_points
+            vampyre_king.take_damage(damage)
+            self.assertTrue(TestVampyreKing._damage_inflicted_correctly(damage, lives_b4, hit_points_b4, vampyre_king))
+
+    @staticmethod
+    def _damage_inflicted_correctly(damage, lives_b4, hit_points_b4, vampyre_king):
+        hit_points_per_life = 140
+        damage_inflicted = damage // 4
+        total_hit_points_b4 = (lives_b4 - 1) * hit_points_per_life + hit_points_b4
+        remaining_hit_points = total_hit_points_b4 - damage_inflicted
+        if remaining_hit_points <= 0:
+            return vampyre_king.lives == 0 and vampyre_king.hit_points == 0
+        else:
+            if remaining_hit_points % hit_points_per_life == 0:
+                return vampyre_king.lives == (remaining_hit_points // hit_points_per_life) and \
+                       vampyre_king.hit_points == hit_points_per_life
+            else:
+                return vampyre_king.lives == ((remaining_hit_points // hit_points_per_life) + 1) and \
+                       vampyre_king.hit_points == (remaining_hit_points % hit_points_per_life)
 
 class TestVampyre(unittest.TestCase):
     """
