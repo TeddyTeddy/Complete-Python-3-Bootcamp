@@ -72,3 +72,14 @@ class Vampyre(Enemy):
     def __init__(self, name):
         super().__init__(name, hit_points=12, lives=3)
 
+    def dodges(self):  # dodge: bypass
+        from random import randint
+        return randint(1,3) == 3
+
+    def take_damage(self, damage):
+        if self.dodges():
+            print(f'Vampire dodged the attack and did not take any damage')
+        else:
+            super().take_damage(damage)
+
+
