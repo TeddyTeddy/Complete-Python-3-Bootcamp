@@ -53,12 +53,29 @@ class Body(Tag):
         super().display(file=file)
 
 
-class HtmlDoc(object):
+class HtmlDocComposition(object):
     def __init__(self, title_contents=''):
-        self._doc_type = DocType()  # composition
-        self._head = Head()  # composition
+        self._doc_type = DocType()  # composition, has a relationship, owns the object
+        self._head = Head()         # composition, has a relationship, owns the object
         self._head.add_tag(name='title', contents=title_contents)
-        self._body = Body()  # composition
+        self._body = Body()         # composition, has a relationship, owns the object
+
+    def add_tag(self, name, contents):
+        self._body.add_tag(name, contents)  # composition & delegation
+
+    def display(self, file=None):  # polymorphism using composition and delegation
+        self._doc_type.display(file=file)
+        print('<html>', file=file)
+        self._head.display(file=file)
+        self._body.display(file=file)
+        print('</html>', file=file)
+
+
+class HtmlDocAggregation(object):
+    def __init__(self, doc_type, head, body):
+        self._doc_type = doc_type   # aggregation, has a relationship, does not own the object
+        self._head = head           # aggregation, has a relationship, does not own the object
+        self._body = body           # aggregation, has a relationship, does not own the object
 
     def add_tag(self, name, contents):
         self._body.add_tag(name, contents)  # composition & delegation
@@ -72,11 +89,26 @@ class HtmlDoc(object):
 
 
 if __name__ == '__main__':
-    my_page = HtmlDoc(title_contents='Document title')
+    my_page = HtmlDocComposition(title_contents='Document title')
     my_page.add_tag('h1', 'main heading')
     my_page.add_tag('h2', 'sub-heading')
     my_page.add_tag('p', 'this is a paragraph')
 
-    with open('main.html', 'w') as file:
+    with open('main_composition.html', 'w') as file:
         my_page.display(file=file)
     file.close()
+
+    new_doc_type = DocType()
+    new_head = Head()
+    new_head.add_tag(name='title', contents='Aggregation document')
+    new_body = Body()
+    new_body.add_tag('h1', 'Aggregation')
+    new_body.add_tag('p', 'Unlike <strong>composition</strong>, aggregation uses existing instances of objects to build up another object')
+    new_body.add_tag('p', 'The composed object does not actually own the objects that it is composed of - if it is destroyed, those objects continue to exist')
+
+    aggregated_document = HtmlDocAggregation(new_doc_type, new_head, new_body)
+
+    with open('main_aggregation.html', 'w') as file:
+        aggregated_document.display(file=file)
+    file.close()
+
