@@ -1,4 +1,4 @@
-from math import pi  # pi is imported directly into main_program's global symbol table! Proof: line 20
+from math import pi  # pi is imported directly into main_program's global symbol table! Proof: line 20 and [3]
 import module_a      # module_a is added to global symbol table of main_program.py
 import module_b      # module_b is added to global symbol table of main_program.py
 import module_c      # module_c is added to global symbol table of main_program.py
