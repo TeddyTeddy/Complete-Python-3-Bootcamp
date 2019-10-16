@@ -72,11 +72,8 @@ def do_play_black_jack(chips):
         else:
             print('Player decided to stay. It is dealers turn now..')
             break
-    else: # when while loop is over
-        if player_hand.is_busted():
-            winner = 'Dealer'
 
-    if winner is None:  # winner is not clear yet and player stays at this point now
+    if not player_hand.is_busted():  # winner is not clear yet and player stays at this point now
         # If a Player Stands, play the Dealer's hand. The dealer will always Hit until the Dealer's value
         # meets or exceeds 17
         dealer_hand.do_play_dealers_hand(deck)
