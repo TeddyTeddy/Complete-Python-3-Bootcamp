@@ -29,7 +29,7 @@ class Hand:
 
     def is_busted(self):
         value = self.value()
-        return value >= 21
+        return value > 21
 
     @abstractmethod
     def value(self):
@@ -87,7 +87,7 @@ class DealerHand(Hand):
                 total_except_non_valued_aces += card.value
 
         for np_ace_index in np_aces_indexes:
-            if total_except_non_valued_aces + 11 < 21:
+            if total_except_non_valued_aces + 11 <= 21:
                 self._cards[np_ace_index].set_ace_value(11)
             else:
                 self._cards[np_ace_index].set_ace_value(1)
