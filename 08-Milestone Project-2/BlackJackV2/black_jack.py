@@ -5,11 +5,16 @@ from deck import Deck
 
 def get_bet(chips):
     while True:
-        bet = int(input(f'What is your bet in chips? (max. bet is {chips} chips): '))
-        if bet <= chips:
-            return bet
-        else:
-            print(f'You cannot bet more than {chips} chips. Asking again.. ')
+        try:
+            bet = int(input(f'What is your bet in chips? (min. bet is 1 and max. bet is {chips} chips): '))
+        except ValueError:
+            print('Please enter a number. Asking again..')
+            continue
+        else:  # user entered a number
+            if 1 <= bet <= chips:
+                return bet
+            else:
+                print(f'Wrong number. Min bet is 1 and max bet is {chips} chips). Asking again.. ')
 
 
 def ask_player_hit_or_stay():
