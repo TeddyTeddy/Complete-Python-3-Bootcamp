@@ -45,9 +45,14 @@ class PlayerHand(Hand):
     @staticmethod
     def _do_get_1_or_11(card):
         question = f"For the {card}, What should be the value? (1/11)?"
-        answer = int(input(question))
-        while answer != 1 and answer != 11:
-            answer = int(input(question))
+        while True:
+            try:
+                answer = int(input(question))
+            except ValueError:
+                print('You did not enter a number. Please enter 1 or 11')
+            else:  # user entered a number
+                if answer == 1 or answer == 11:
+                    break
         return answer
 
     def value(self):
