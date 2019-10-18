@@ -1,4 +1,4 @@
-# For '*' and '**' in function calls in decorators:
+# For '*args' and '**kwargs' in function calls in decorators:
 # https://www.ritchieng.com/python/decorators-kwargs-args/
 
 
@@ -30,7 +30,7 @@ def decorator_three(original_func):
 # func_needs_decorating = decorator_one(func_needs_decorating)
 @decorator_one  # change this to decorator_two or decorator_three
 def func_needs_decorating(*args, **kwargs):
-    print(f'I need decorating, my args: {args} my kwargs: {kwargs}')
+    print(f'I need decorating, my positional args: {args} my keyworded kwargs: {kwargs}')
 
 
 if __name__ == '__main__':
