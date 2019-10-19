@@ -31,6 +31,8 @@ def add_many_vectors(**kwargs):
             total = list(map(lambda x,y: x+y, total, kwargs[vector_key]))
     else:  # kwargs did not contain any vectors
         total = []
+
+    iter('hello')
     return total
 
 
