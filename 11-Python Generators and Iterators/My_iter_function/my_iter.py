@@ -42,3 +42,4 @@ if __name__ == '__main__':
     for letter in s_iter:
         print(letter)
 
+
