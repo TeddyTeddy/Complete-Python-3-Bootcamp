@@ -34,3 +34,5 @@ if __name__ == '__main__':
     print(next(iterator))       # 2
     print(next(iterator))       # 3
     print(next(iterator))       # StopIteration error
+
+
