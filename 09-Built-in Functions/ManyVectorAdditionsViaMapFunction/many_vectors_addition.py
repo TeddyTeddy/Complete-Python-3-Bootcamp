@@ -28,11 +28,10 @@ def add_many_vectors(**kwargs):
     if vector_length is not None:
         total = [0]*vector_length  # i.e. [0, 0, 0] --> itself a vector
         for vector_key in kwargs:  # for each key (i.e. named as vector) in kwargs
-            total = list(map(lambda x,y: x+y, total, kwargs[vector_key]))
+                total = list(map(lambda x,y: x+y, total, kwargs[vector_key]))
     else:  # kwargs did not contain any vectors
         total = []
 
-    iter('hello')
     return total
 
 

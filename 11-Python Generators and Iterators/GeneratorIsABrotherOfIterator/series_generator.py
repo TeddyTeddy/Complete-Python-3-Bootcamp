@@ -29,10 +29,12 @@ def series_generator(low, high):
 
 
 if __name__ == '__main__':
+    # (A)s
     n_list = Series(1, 10)   # an iterable object that returns an iterator when __iter__() method called
     print(list(n_list))      # you can cast an iterable into a list()
 
-    # (1) and (2) are equivalent to each other
+    # (1) and (2) are equivalent to each other and they implement (A) utilizing generators
+    # (1) populating a series, which is a container in memory
     n_list = []
     for num in series_generator(1, 10):
         n_list.append(num)
@@ -40,7 +42,7 @@ if __name__ == '__main__':
 
     # (2): How Python runs (1) in the background
     n_list = []
-    generator = series_generator(1, 10) # this is not a fn call! It returns a generator object
+    generator = series_generator(1, 10)  # this is not a fn call! It returns a generator object
     print(generator)
     while True:
         try:
@@ -49,25 +51,10 @@ if __name__ == '__main__':
             num = next(generator)  # a generator object is an iterator object
         except StopIteration:
             break
-        else: # there was not any StopIteration exception
+        else:  # there was not any StopIteration exception
             n_list.append(num)
     print(n_list)
 
-    # (3) is a generator expression utilized
-    squares = (x * x for x in range(1, 10))  # a generator expression is a generator
-    print(type(squares))  # <class 'generator'>
-    print(list(squares))  # squares -> a generator -> is an iterator
-
-    # (4): how (3) can be implemented using a generator function
-    def squares():  # a generator function
-        for x in range(1, 10):
-            yield x*x
-        pass  # when execution reaches here, Python will raise a StopIteration error
-    print(type(squares))  # <class 'function'>
-    lst = []
-    for square in squares():
-        lst.append(square)
-    print(lst)
 
 
 

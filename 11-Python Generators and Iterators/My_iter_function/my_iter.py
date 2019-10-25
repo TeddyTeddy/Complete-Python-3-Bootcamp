@@ -5,30 +5,38 @@
 # and the line number where execution should be resumed. Next time the iterator is invoked
 # execution starts from the line number along with the stored symbol table.
 def my_iter(iterable):
-    for item in iterable:
-        yield item
+    # check if iterable is indeed iterable
+    if '__iter__' not in dir(iterable):
+        iterable_type = type(iterable)
+        msg = f' {iterable_type} object is not iterable'
+        raise TypeError(msg)
+
+    # if execution reaches here, then iterable is indeed iterable
+    return iterable.__iter__()
 
 
 if __name__ == '__main__':
     s = 'Hello'  # string is an iterable
-    s_iter = my_iter(s)  # note that there is no "next(my_iter(s))" here, it just returns an iterator object
-    print(s_iter)        # <generator object my_iter at 0x7f30b124d360>
+    s_iterator = my_iter(s)  # note that there is no "next(my_iter(s))" here, it just returns an iterator object
+    print(s_iterator)        # <str_iterator object at 0x7f18af85c978>
 
     print('(1) For loop calling on iterator s_iter')
     # for loop implementation (1) and while loop implementation (2) are equivalent
     # (1) For loop calling on iterator s_iter
-    for letter in s_iter:  # keep invoking s_iter iterator till it raises StopIteration
+    for letter in s_iterator:  # keep invoking s_iter iterator till it raises StopIteration
         print(letter)
     # once the for loop is over, s_iter iterator is in a state, where next(s_iter) would raise StopIteration
     # print(next(s_iter))  ## uncomment this line and see StopIteration error for yourself
 
     print("(2) While loop calling on next(s_iter)")
     # (2) While loop calling on next(s_iter)
-    s_iter = my_iter(s)    # re-initialize s_iter with a brand new iterator object with its zeroed state
-    print(s_iter)       # <generator object my_iter at 0x7fdb0ae03ba0>
+    s_iterator = my_iter(s)    # re-initialize s_iter with a brand new iterator object with its zeroed state
+    print(s_iterator)          # <str_iterator object at 0x7f18ada0b0f0>
+
+    iterator = iter(s_iterator)  # s_iterator is iterable, and returns itself as own iterator
     while True:
         try:
-            letter = next(s_iter)
+            letter = next(iterator)
         except StopIteration:
             break
         else:

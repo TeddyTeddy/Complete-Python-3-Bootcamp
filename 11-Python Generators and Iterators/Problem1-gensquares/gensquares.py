@@ -1,5 +1,8 @@
 
 # Refer to unit tests for my_range() function
+# NOTE! built-in range is a class implementing __iter__()
+# which makes it an iterable. Below, we implement a generator
+# function to mimic the behaviour of built in range class
 def my_range(N):
     """
     A built-in range() function equivalent, an iterator function

@@ -52,3 +52,6 @@ if __name__ == '__main__':
     generator = fibonacci()
     lst = list(my_islice(generator, 0, 10))
     print(lst)
+
+    from itertools import count
+    count()
