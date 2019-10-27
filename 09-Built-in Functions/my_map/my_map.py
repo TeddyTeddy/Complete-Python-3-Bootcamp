@@ -31,35 +31,46 @@ def my_map(*args):
         raise TypeError(msg)
 
     func = args[0]
-    iterables = list(args)
-    iterables.pop(0)  # 0.th argument is a function, not an iterable
+    iterables_list = list(args)  # [function iterable1 iterable2 ...]
+    iterables_list.pop(0)  # 0.th argument is a function, not an iterable --> [ iterable1, iterable2 ... ]
     iterators = []
-    for iterable in iterables:
+    for iterable in iterables_list:
         iterators.append(iter(iterable))
+
+    # iterator = iter(iterables_list)
+    # while True:
+    #     try:
+    #         iterable = next(iterator)
+    #     except StopIteration:
+    #         break
+    #     else:
+    #         iterators.append(iter(iterable))
 
     while True:
         try:
             arguments = []
             for iterator in iterators:
-                arguments.append(next(iterator))  # next(i) can throw a StopIteration error
+                arguments.append(next(iterator))  # next(iterator) can throw a StopIteration error
         except StopIteration:
             break
         else:  # no StopIteration error
             yield func(*arguments)
+    # raise StopIteration  ## imaginary statement for generator function my_map
 
 
 if __name__ == '__main__':
     list_1 = [1, 2, 3]  # an iterable
     list_2 = [5, 2, 4]  # an iterable
     list_3 = [7, 7, 7]  # an iterable
-    gen_total_iterator1 = map(get_total, list_1, list_2, list_3)     # built-in map usage
-    get_total_iterator2 = my_map(get_total, list_1, list_2, list_3)  # own my_map usage
+    builtin_map_generator = map(get_total, list_1, list_2, list_3)     # built-in map usage, returns an iterator
+    print('__next__' in dir(builtin_map_generator))  # True, built-in map returns a generator, which is an iterator
+    print('__iter__' in dir(builtin_map_generator))  # True, built-in map iterator is an iterable
+    print(builtin_map_generator == iter(builtin_map_generator)) # True, builtin_map_generator returns itself as iterator
+    print(list(builtin_map_generator))
 
-    # get_total_iterator is an iterable, which returns itself as its own iterator
-    print('__iter__' in dir(get_total_iterator2))  # True, proof that get_total_iterator2 is an iterable
-    iterator1 = iter(get_total_iterator2)
-    iterator2 = iter(iterator1)
-    print(iterator1 == iterator2)  # True, proof that get_total_iterator returns itself as iterator
+    my_map_generator = my_map(get_total, list_1, list_2, list_3)  # own my_map usage
+    print('__next__' in dir(my_map_generator))  # True, proof that my_map_generator is an iterator
+    print('__iter__' in dir(my_map_generator))  # True, proof that my_map_generator is an iterable
+    print(my_map_generator == iter(my_map_generator))  # True, proof that my_map returns itself as its own iterator
+    print(list(my_map_generator))  # Yes! list class excepts our own "my_map" iterator
 
-    print(list(get_total_iterator2))  # Yehuu! list class excepts our own "my_map" iterator
-    print(list(gen_total_iterator1))
