@@ -62,11 +62,11 @@ if __name__ == '__main__':
     list_1 = [1, 2, 3]  # an iterable
     list_2 = [5, 2, 4]  # an iterable
     list_3 = [7, 7, 7]  # an iterable
-    builtin_map_generator = map(get_total, list_1, list_2, list_3)     # built-in map usage, returns an iterator
-    print('__next__' in dir(builtin_map_generator))  # True, built-in map returns a generator, which is an iterator
-    print('__iter__' in dir(builtin_map_generator))  # True, built-in map iterator is an iterable
-    print(builtin_map_generator == iter(builtin_map_generator)) # True, builtin_map_generator returns itself as iterator
-    print(list(builtin_map_generator))
+    builtin_map_instance = map(get_total, list_1, list_2, list_3)     # built-in map class usage, returns an iterator
+    print('__next__' in dir(builtin_map_instance))  # True, built-in map returns a generator, which is an iterator
+    print('__iter__' in dir(builtin_map_instance))  # True, built-in map iterator is an iterable
+    print(builtin_map_instance == iter(builtin_map_instance)) # True, map instance returns itself as iterator
+    print(list(builtin_map_instance))
 
     my_map_generator = my_map(get_total, list_1, list_2, list_3)  # own my_map usage
     print('__next__' in dir(my_map_generator))  # True, proof that my_map_generator is an iterator
