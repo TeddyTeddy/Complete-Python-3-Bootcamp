@@ -27,6 +27,13 @@ class TestMyReduce(unittest.TestCase):
         with self.assertRaises(TypeError):
             my_reduce(add, [])
 
+    def test_no_function_provided(self):
+        with self.assertRaises(TypeError):
+            my_reduce(1, [1,2,3])
+
+    def test_with_one_item_in_the_list(self):
+        self.assertEqual(1, my_reduce(add, [1]))
+
     def test_with_list(self):
         sequence = [1, 2, 3]
         initial = 4

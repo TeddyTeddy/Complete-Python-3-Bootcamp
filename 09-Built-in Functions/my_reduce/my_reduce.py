@@ -21,7 +21,10 @@ def my_reduce(*args):
         msg = f'my_reduce expected at least 2 arguments, got {len(args)}'
         raise TypeError(msg)
 
-    # TODO! check args[0] type must be a function
+    # check args[0] type must be a function
+    if not callable(args[0]):
+        msg = f'{type(args[0])} object is not callable'
+        raise TypeError(msg)
 
     # check args[1] type must be an iterable
     if '__iter__' not in dir(args[1]):
