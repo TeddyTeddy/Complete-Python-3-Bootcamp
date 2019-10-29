@@ -1,9 +1,6 @@
 
 
 # implemented a built-in equivalent of iter() function
-# behind the scenes, my_iter stores its own symbol table (i.e. its state via locals())
-# and the line number where execution should be resumed. Next time the iterator is invoked
-# execution starts from the line number along with the stored symbol table.
 def my_iter(iterable):
     # check if iterable is indeed iterable
     if '__iter__' not in dir(iterable):
