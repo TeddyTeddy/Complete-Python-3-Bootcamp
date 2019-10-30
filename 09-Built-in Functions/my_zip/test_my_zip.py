@@ -29,6 +29,13 @@ class MyZipGeneratorFunctionTest(unittest.TestCase):
         builtin_zip_iterator = zip(my_set_1, my_set_2, my_list_1)  # A builtin zip class instance
         self.assertEqual(list(my_zip_iterator), list(builtin_zip_iterator))
 
+    def test_with_dictionaries(self):
+        d1 = {'a': 1, 'b': 2}
+        d2 = {'c': 4, 'd': 5}
+        my_zip_iterator = my_zip(d1, d2)   # a generator to test
+        builtin_zip_iterable = zip(d1, d2) # a builtin iterable to test againist
+        self.assertEqual(list(my_zip_iterator), list(builtin_zip_iterable))
+
 
 class MyZipClassTest(unittest.TestCase):
     def test_empty_args(self):

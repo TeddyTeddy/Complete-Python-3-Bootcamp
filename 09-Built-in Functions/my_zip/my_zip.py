@@ -24,13 +24,13 @@ def my_zip(*iterables):
         iterators = [iter(iterable) for iterable in iterables]
         while True:
             try:
-                i_th = []
+                i_th_step = []
                 for iterator in iterators:
-                    i_th.append(next(iterator))  # can throw StopIteration error
+                    i_th_step.append(next(iterator))  # can throw StopIteration error
             except StopIteration: # shortest iterator raised StopIteration error
                 break
             else:  # did not raise StopIteration error
-                yield tuple(i_th)
+                yield tuple(i_th_step)
 
 
 # the same implementation in a class form (as in builtin class zip)
@@ -45,9 +45,9 @@ class MyZip:
         if not self._iterators:
             raise StopIteration
 
-        i_th = []
+        i_th_step = []
         for iterator in self._iterators:
-            i_th.append(next(iterator))  # can throw StopIteration error
+            i_th_step.append(next(iterator))  # can throw StopIteration error
 
-        return tuple(i_th)
+        return tuple(i_th_step)
 
