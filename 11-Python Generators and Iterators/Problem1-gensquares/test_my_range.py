@@ -1,67 +1,60 @@
 import unittest
-import gensquares
+import my_range
 
 
-class TestMyRange(unittest.TestCase):
-    def test_N_is_minus_two(self):
-        """
-        >>> iterable = range(-2)
-        >>> iterator = iter(iterable)
-        >>> next(iterator)
-        Traceback (most recent call last):
-          File "<stdin>", line 1, in <module>
-        StopIteration
-        """
-        test_iterator = gensquares.my_range(-2)  # iterator is my_range(N)
-        with self.assertRaises(StopIteration):
-            next(test_iterator)
+def tuple_generator(file):
+    for line in file:  # i.e. "3 7 2\n"
+        line = line.replace('\n', '')       # remove "\n" from the line
+        arguments_list = line.split(' ')    # i.e. ['3', '7', '2']
+        arguments_list = [int(argument) for argument in arguments_list]  # i.e. [3, 7, 2]
+        yield tuple(arguments_list)         # (3, 7, 2)
 
-    def test_N_is_minus_one(self):
-        """
-        >>> iterable = range(-1)
-        >>> iterator = iter(iterable)
-        >>> next(iterator)
-        Traceback (most recent call last):
-          File "<stdin>", line 1, in <module>
-        StopIteration
-        """
-        test_iterator = gensquares.my_range(-1)  # iterator is my_range(N)
-        with self.assertRaises(StopIteration):
-            next(test_iterator)
 
-    def test_N_is_zero(self):
-        """
-        >>> iterable = range(0)
-        >>> iterator = iter(iterable)
-        >>> next(iterator)
-        Traceback (most recent call last):
-          File "<stdin>", line 1, in <module>
-        StopIteration
-        """
-        test_iterator = gensquares.my_range(0)  # iterator is my_range(N)
-        with self.assertRaises(StopIteration):
-            next(test_iterator)
+class TestMyRangeGeneratorFunction(unittest.TestCase):
 
-    def test_N_is_one(self):
-        test_iterator = gensquares.my_range(1)  # iterator is my_range(N)
-        self.assertEqual(next(test_iterator), 0)
-        with self.assertRaises(StopIteration):
-            next(test_iterator)
+    # https://stackoverflow.com/questions/17353213/init-for-unittest-testcase
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._file = open('arguments.txt')
+        self._tuple_generator = tuple_generator(self._file)
 
-    def test_N_is_two(self):
-        test_iterator = gensquares.my_range(2)  # iterator is my_range(N)
-        self.assertEqual(next(test_iterator), 0)
-        self.assertEqual(next(test_iterator), 1)
-        with self.assertRaises(StopIteration):
-            next(test_iterator)
+    def __del__(self):
+        self._file.close()
 
-    def test_N_is_three(self):
-        test_iterator = gensquares.my_range(3)  # iterator is my_range(N)
-        self.assertEqual(next(test_iterator), 0)
-        self.assertEqual(next(test_iterator), 1)
-        self.assertEqual(next(test_iterator), 2)
-        with self.assertRaises(StopIteration):
-            next(test_iterator)
+    @staticmethod
+    def populate_my_range_and_compare_with_builtin_range(self, *args):  # args i.e. (100, 2, -7)
+        test_generator = my_range.my_range(*args)  # function to be tested
+        verification_iterable = range(*args)       # to be verified against the built-in class
+        self.assertEqual(list(test_generator), list(verification_iterable))
+
+    def test_all_parameter_combos(self):
+        for args in self._tuple_generator:  # args is a tuple i.e. (100, 2, -7)
+            TestMyRangeGeneratorFunction.populate_my_range_and_compare_with_builtin_range(self, *args)
+
+
+class TestMyRangeClass(unittest.TestCase):
+
+    # https://stackoverflow.com/questions/17353213/init-for-unittest-testcase
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._file = open('arguments.txt')
+        self._tuple_generator = tuple_generator(self._file)
+        # print(hasattr(self._tuple_generator, '__iter__'))  # True
+        # print(hasattr(self._tuple_generator, '__next__'))  # True
+        # print(self._tuple_generator == iter(self._tuple_generator))  # True
+
+    def __del__(self):
+        self._file.close()
+
+    @staticmethod
+    def instantiate_my_range_and_compare_with_range(self, *args):  # args i.e. (100, 2, -7)
+        test_iterable = my_range.MyRange(*args)  # class to be tested
+        verification_iterable = range(*args)     # to be verified against the built-in class
+        self.assertEqual(list(test_iterable), list(verification_iterable))
+
+    def test_all_parameter_combos(self):
+        for args in self._tuple_generator:  # args is a tuple i.e. (100, 2, -7)
+            TestMyRangeClass.instantiate_my_range_and_compare_with_range(self, *args)
 
 
 if __name__ == '__main__':
