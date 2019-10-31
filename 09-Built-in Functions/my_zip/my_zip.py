@@ -27,7 +27,7 @@ def my_zip(*iterables):
                 i_th_step = []
                 for iterator in iterators:
                     i_th_step.append(next(iterator))  # can throw StopIteration error
-            except StopIteration: # shortest iterator raised StopIteration error
+            except StopIteration:  # shortest iterator raised StopIteration error
                 break
             else:  # did not raise StopIteration error
                 yield tuple(i_th_step)
