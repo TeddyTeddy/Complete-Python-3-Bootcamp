@@ -7,45 +7,51 @@
 # players may use when entering the direction. These words will be the keys,
 # and their values will be a single letter that program may determine which way
 # to go
-locations = {0: 'Exit',
-             1: 'On the road',
-             2: 'On the hill',
-             3: 'In a building',
-             4: 'In a valley',
-             5: 'In a forest'}
+locations = {'EXIT': 'On the exit',
+             'ROAD': 'On the road',
+             'HILL': 'On the hill',
+             'BUILDING': 'In a building',
+             'VALLEY': 'In a valley',
+             'FOREST': 'In a forest'}
 
-exits = {0: {'Q': 0},
-         1: {'W': 2, 'E': 3, 'N': 5, 'S': 4, 'Q': 0},  # for 1 Road
-         2: {'N': 5, 'Q': 0},                          # for 2 Hill
-         3: {'W': 1, 'Q': 0},                          # for 3 Building
-         4: {'W': 2, 'N': 1, 'Q': 0},                  # for 4 Valley
-         5: {'W': 2, 'S': 1, 'Q': 0}}                  # for 5 Forest
+exits = {'EXIT': {'Q': 'EXIT'},
+         'ROAD': {'W': 'HILL', 'HILL': 'HILL', 'E': 'BUILDING', 'BUILDING': 'BUILDING', 'N': 'FOREST',
+                  'FOREST': 'FOREST', 'S': 'VALLEY', 'VALLEY': 'VALLEY', 'Q': 'EXIT'},
+         'HILL': {'N': 'FOREST', 'FOREST': 'FOREST', 'Q': 'EXIT'},
+         'BUILDING': {'W': 'ROAD', 'ROAD': 'ROAD', 'Q': 'EXIT'},
+         'VALLEY': {'W': 'HILL', 'HILL': 'HILL', 'N': 'ROAD', 'ROAD': 'ROAD', 'Q': 'EXIT'},
+         'FOREST': {'W': 'HILL', 'HILL': 'HILL', 'S': 'ROAD', 'ROAD': 'ROAD', 'Q': 'EXIT'}}
 
 vocabulary = {'EAST': 'E',  # keys: possible text entries, values: Q,W,E,S,N letters which are key values
               'WEST': 'W',  # in exits dict
               'NORTH': 'N',
               'SOUTH': 'S',
-              'QUIT': 'Q'}
+              'QUIT': 'Q',
+              'ROAD': 'ROAD',
+              'HILL': 'HILL',
+              'BUILDING': 'BUILDING',
+              'VALLEY': 'VALLEY',
+              'FOREST': 'FOREST'}
 
 
 def play_game():
-    location_key = 1
+    location_key = 'ROAD'
     while True:
         # get all the directions available for location_key
-        available_directions = ', '.join(exits[location_key].keys())  # i.e. 'W, E, N, S, Q'
+        available_exits = ', '.join(exits[location_key].keys())  # i.e. 'W, HILL, E, BUILDING, N, FOREST, S, VALLEY, Q'
         print(f'** Your current location: {locations[location_key]}')                      # i.e. 'On the road'
-        if location_key == 0:
+        if location_key == 'EXIT':
             break
-        print('Available directions: ' + available_directions)
-        selected_direction = input('Enter selected direction (east/west/north/south): ').upper()  # user can enter any text here
-        if selected_direction in vocabulary:
-            selected_direction = vocabulary[selected_direction]  # mapped to a letter Q, W, E, S, N as a key
-            if selected_direction in available_directions:
-                location_key = exits[location_key][selected_direction]
+        print('Available exits: ' + available_exits)
+        selected_exit = input('Enter selected exits: ').upper()  # user can enter any text here
+        if selected_exit in vocabulary:
+            selected_exit = vocabulary[selected_exit]
+            if selected_exit in available_exits:
+                location_key = exits[location_key][selected_exit]
             else:
-                print(f'{selected_direction} is not available in your current location')
+                print(f'{selected_exit} is not available in your current location')
         else:
-            print(f'{selected_direction} is not a valid a direction ')
+            print(f'{selected_exit} is not a valid a direction ')
 
 
 if __name__ == '__main__' :
