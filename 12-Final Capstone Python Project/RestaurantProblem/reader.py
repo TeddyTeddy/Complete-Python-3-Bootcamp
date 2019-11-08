@@ -1,11 +1,22 @@
+"""
+A module which is used to read the contents of the file 'restaurant_small.txt'
+"""
+
+
 class ReadingState:
+    """
+    A helper class. It has a state information starting with NAME and going
+    circularly NAME -> RATING -> PRICE -> CUISINES -> NAME -> RATING ... and so on.
+    State information tells what kind of line (in the file) we expect to read (i.e. RATING, 82%)
+    so that we can process that line and return the result accordingly i.e. tuple (RATING, 82)
+    """
     def __init__(self):
         self._state = 'NAME'
         self._next = {'NAME': 'RATING', 'RATING': 'PRICE', 'PRICE': 'CUISINES', 'CUISINES': 'NAME'}
 
     def identify(self, line):
         """
-        Given line, identify() calculates the line-type and the value stored in the line
+        Given a line str, identify() tells the line-type and the processed value stored in the line
         :param line: (str) a line to be identified as NAME/RATING/PRICE or CUISINES (i.e. <line-type>
         :return: (tuple) of <line-type>, value: i.e.
                             NAME, restaurant-name (str)
@@ -13,16 +24,19 @@ class ReadingState:
                             PRICE, restaurant-price (str)
                             CUISINES, a tuple of (cuisine1, cuisine2, ...)
         """
-        current_state = self._state
+        expecting = self._state
         self._state = self._next[self._state]  # set the state for the next call to .identify()
-        if current_state == 'NAME':
-            return 'NAME', line
-        elif current_state == 'RATING':
-            return 'RATING', int(line.replace('%', ''))
-        elif current_state == 'PRICE':
-            return 'PRICE', line
-        elif current_state == 'CUISINES':
-            return 'CUISINES', tuple(line.split(', '))
+        if expecting == 'NAME':
+            result = 'NAME', line
+        elif expecting == 'RATING':
+            result = 'RATING', int(line.replace('%', ''))
+        elif expecting == 'PRICE':
+            result = 'PRICE', line
+        elif expecting == 'CUISINES':
+            result = 'CUISINES', tuple(line.split(', '))
+        else:
+            raise NotImplementedError  # our state machine is broken
+        return result
 
 
 def read_restaurants(file):
@@ -64,4 +78,3 @@ def read_restaurants(file):
                     cuisine_to_names[cuisine] = [restaurant_name]
 
     return name_to_rating, price_to_names, cuisine_to_names
-
