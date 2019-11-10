@@ -31,7 +31,13 @@ vocabulary = {'EAST': 'E',  # keys: possible text entries, values: Q,W,E,S,N let
               'HILL': 'HILL',
               'BUILDING': 'BUILDING',
               'VALLEY': 'VALLEY',
-              'FOREST': 'FOREST'}
+              'FOREST': 'FOREST',
+              'E': 'E',
+              'S': 'S',
+              'W': 'W',
+              'N': 'N',
+              'Q': 'Q',
+              'EXIT': 'Q'}
 
 
 def play_game():
