@@ -1,27 +1,7 @@
 """
-Does the following:
-Step 1 - Building the data structures
-     Opens 'restaurant_small.txt' for read-only and passes it to reader.read_restaurants()
-    As a result, it receives NAME_TO_RATING, PRICE_TO_NAMES, CUISINE_TO_NAMES as such:
-
-    NAME_TO_RATING = {'Georgie Porgie': 87, 'Queen St. Cafe': 82, 'Dumplings R Us': 71, 'Mexican Grill': 85,
-                  'Deep Fried Everything': 52}
-    PRICE_TO_NAMES = {'$': ['Queen St. Cafe', 'Dumplings R Us', 'Deep Fried Everything'], '$$': ['Mexican Grill'],
-                  '$$$': ['Georgie Porgie'], '$$$$': []}
-    CUISINE_TO_NAMES = {'Pub Food': ['Georgie Porgie', 'Deep Fried Everything'], 'Canadian': ['Georgie Porgie'],
-                    'Malaysian': ['Queen St. Cafe'], 'Thai': ['Queen St. Cafe'], 'Chinese': ['Dumplings R Us'],
-                    'Mexican': ['Mexican Grill']}
-
-Step 2 - Filter By Price Range
-    it selects the lowest price end restaurants as <NAMES_MATCHING_PRICE>
-
-Step 3 - Filter By Cuisine For Those Names Matching The Price
-    it initializes <SELECTED_CUISINES> as ['Tacos', 'Pub Food', 'Chinese']
-    it then filters <NAMES_MATCHING_PRICE> via the <selected cuisines> ['Tacos', 'Pub Food', 'Chinese'] (refer to
-    the call to NAMES_FINAL = filter_by_cuisine(...) call )
-
-Step 4 - Sort and Return
-    sort the NAMES_FINAL; refer to SORTED_FINAL = build_rating_list(names_matching, NAME_TO_RATING)  call
+    Refer to Restaurant Problem.ipynb for the problem description.
+    Refer to the Steps 1-4 in the problem description
+    Steps 1-4 are also described in the code below
 """
 import reader
 
