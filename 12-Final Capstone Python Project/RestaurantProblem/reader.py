@@ -3,7 +3,7 @@ A module which is used to read the contents of the file 'restaurant_small.txt'
 """
 
 
-class ReadingState:
+class LineAnalyzer:
     """
     A helper class. It has a state information starting with NAME and going
     circularly NAME -> RATING -> PRICE -> CUISINES -> NAME -> RATING ... and so on.
@@ -14,9 +14,9 @@ class ReadingState:
         self._state = 'NAME'
         self._next = {'NAME': 'RATING', 'RATING': 'PRICE', 'PRICE': 'CUISINES', 'CUISINES': 'NAME'}
 
-    def identify(self, line):
+    def analyze(self, line):
         """
-        Given a line str, identify() tells the line-type and the processed value stored in the line
+        Given a line str, analyze() tells the line-type and the processed value stored in the line
         :param line: (str) a line to be identified as NAME/RATING/PRICE or CUISINES (i.e. <line-type>
         :return: (tuple) of <line-type>, value: i.e.
                             NAME, restaurant-name (str)
@@ -25,7 +25,7 @@ class ReadingState:
                             CUISINES, a tuple of (cuisine1, cuisine2, ...)
         """
         expecting = self._state
-        self._state = self._next[self._state]  # set the state for the next call to .identify()
+        self._state = self._next[self._state]  # set the state for the next call to .analyze()
         if expecting == 'NAME':
             result = 'NAME', line
         elif expecting == 'RATING':
@@ -52,11 +52,11 @@ def read_restaurants(file):
     name_to_rating = {}
     price_to_names = {'$': [], '$$': [], '$$$': [], '$$$$': []}
     cuisine_to_names = {}
-    reading_state = ReadingState()
+    reading_state = LineAnalyzer()
 
     for line in file:
         line = line.replace('\n', '')       # remove "\n" from the line
-        line_type, value = reading_state.identify(line)
+        line_type, value = reading_state.analyze(line)
         # print(f'{line_type}, {value}')
 
         # construct a dict of {restaurant name: rating%}
