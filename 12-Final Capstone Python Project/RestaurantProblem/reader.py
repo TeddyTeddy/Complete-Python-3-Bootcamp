@@ -52,11 +52,11 @@ def read_restaurants(file):
     name_to_rating = {}
     price_to_names = {'$': [], '$$': [], '$$$': [], '$$$$': []}
     cuisine_to_names = {}
-    reading_state = LineAnalyzer()
+    line_analyzer = LineAnalyzer()
 
     for line in file:
         line = line.replace('\n', '')       # remove "\n" from the line
-        line_type, value = reading_state.analyze(line)
+        line_type, value = line_analyzer.analyze(line)
         # print(f'{line_type}, {value}')
 
         # construct a dict of {restaurant name: rating%}
