@@ -81,8 +81,13 @@ def my_islice(*args):
             if step > 1:            # ignore elements in between steps
                 ignore = 1
                 while ignore < step:
-                    next(iterator)  # ignore any element in between steps
-                    ignore += 1
+                    try:
+                        next(iterator)  # ignore any element in between steps
+                    except StopIteration:
+                        return  # In a generator function, the return statement indicates that the generator is done and
+                        # will cause StopIteration to be raised.
+                    else:
+                        ignore += 1
             start += step
 
 

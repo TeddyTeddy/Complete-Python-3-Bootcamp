@@ -180,6 +180,21 @@ class MyIsSliceTestCase(unittest.TestCase):
         # print(list(under_test_generator))
         self.assertEqual(list(reference_iterator), list(under_test_generator))
 
+    def test_step_beyond_the_iterable(self):
+        """
+        if 'start' points at the end of the iterable, then my_islice instance should be returning the last item
+        in the iterable
+        """
+        iterable = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        start = len(iterable) - 5  # start = 5, pointing at 6
+        stop = len(iterable)
+        step = 20
+        reference_iterator = islice(iterable, start, stop, step)
+        under_test_generator = my_islice(iterable, start, stop, step)
+        # print(list(reference_iterator))
+        # print(list(under_test_generator))
+        self.assertEqual(list(reference_iterator), list(under_test_generator))
+
     def test_start_stop_step_are_None(self):
         """
         my_islice(iterable, start, stop[, step]) --> my_islice generator
