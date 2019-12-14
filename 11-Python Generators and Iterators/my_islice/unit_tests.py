@@ -182,8 +182,8 @@ class MyIsSliceTestCase(unittest.TestCase):
 
     def test_step_beyond_the_iterable(self):
         """
-        if 'start' points at the end of the iterable, then my_islice instance should be returning the last item
-        in the iterable
+        if 'start' points at an item in iterable and step is too large then my_islice instance should
+        be returning the item in the iterable
         """
         iterable = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         start = len(iterable) - 5  # start = 5, pointing at 6
