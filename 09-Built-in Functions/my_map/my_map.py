@@ -7,55 +7,56 @@ def get_total(*args):
     return sum(args)
 
 
-# def map(__func: (...) -> _S,
-#         __iter1: Iterable,
-#         __iter2: Iterable,
-#         __iter3: Iterable,
-#         __iter4: Iterable,
-#         __iter5: Iterable,
-#         __iter6: Iterable,
-#         *iterables: Iterable) -> Iterator[_S]
-# Possible types:
-# • (__func: (_T1) -> _S, __iter1: Iterable[_T1]) -> Iterator[_S]
-# • (__func: (_T1, _T2) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2]) -> Iterator[_S]
-# • (__func: (_T1, _T2, _T3) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2], __iter3: Iterable[_T3]) -> Iterator[_S]
-# • (__func: (_T1, _T2, _T3, _T4) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2], __iter3: Iterable[_T3], __iter4: Iterable[_T4]) -> Iterator[_S]
-# • (__func: (_T1, _T2, _T3, _T4, _T5) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2], __iter3: Iterable[_T3], __iter4: Iterable[_T4], __iter5: Iterable[_T5]) -> Iterator[_S]
-# • (__func: (...) -> _S, __iter1: Iterable, __iter2: Iterable, __iter3: Iterable, __iter4: Iterable, __iter5: Iterable, __iter6: Iterable, iterables: Tuple[Iterable, ...]) -> Iterator[_S]
-# map(func, *iterables) –> map object
-# Make an iterator that computes the function using arguments from each of the iterables.
-# Stops when the shortest iterable is exhausted.
 def my_map(*args):
+    """
+    def map(__func: (...) -> _S,
+            __iter1: Iterable,
+            __iter2: Iterable,
+            __iter3: Iterable,
+            __iter4: Iterable,
+            __iter5: Iterable,
+            __iter6: Iterable,
+            *iterables: Iterable) -> Iterator[_S]
+    Possible types:
+    • (__func: (_T1) -> _S, __iter1: Iterable[_T1]) -> Iterator[_S]
+    • (__func: (_T1, _T2) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2]) -> Iterator[_S]
+    • (__func: (_T1, _T2, _T3) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2], __iter3: Iterable[_T3]) -> Iterator[_S]
+    • (__func: (_T1, _T2, _T3, _T4) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2], __iter3: Iterable[_T3], __iter4: Iterable[_T4]) -> Iterator[_S]
+    • (__func: (_T1, _T2, _T3, _T4, _T5) -> _S, __iter1: Iterable[_T1], __iter2: Iterable[_T2], __iter3: Iterable[_T3], __iter4: Iterable[_T4], __iter5: Iterable[_T5]) -> Iterator[_S]
+    • (__func: (...) -> _S, __iter1: Iterable, __iter2: Iterable, __iter3: Iterable, __iter4: Iterable, __iter5: Iterable, __iter6: Iterable, iterables: Tuple[Iterable, ...]) -> Iterator[_S]
+    map(func, *iterables) –> map object
+    Make an iterator that computes the function using arguments from each of the iterables.
+    Stops when the shortest iterable is exhausted.
+    """
     if len(args) < 2:
-        msg = 'map() must have at least two arguments.'
+        msg = f'my_map must have at least two arguments.'
         raise TypeError(msg)
 
     func = args[0]
-    iterables_list = list(args)  # [function iterable1 iterable2 ...]
-    iterables_list.pop(0)  # 0.th argument is a function, not an iterable --> [ iterable1, iterable2 ... ]
-    iterators = []
-    for iterable in iterables_list:
-        iterators.append(iter(iterable))
+    if not callable(func):
+        msg = f'{type(func)} object is not callable'
+        raise TypeError(msg)
 
-    # iterator = iter(iterables_list)
-    # while True:
-    #     try:
-    #         iterable = next(iterator)
-    #     except StopIteration:
-    #         break
-    #     else:
-    #         iterators.append(iter(iterable))
+    iterables = list(args)
+    iterables.pop(0)  # remove func, we are left with iterables
+    for i in iterables:
+        if '__iter__' not in dir(i):  # check if every iterable i is indeed iterable
+            msg = f'{type(func)} object is not iterable'
+            raise TypeError(msg)
+
+    # at this point: func is callable an all iterables are indeed iterables
+    iterators = [iter(i) for i in iterables]
 
     while True:
         try:
             arguments = []
             for iterator in iterators:
-                arguments.append(next(iterator))  # next(iterator) can throw a StopIteration error
+                arguments.append(next(iterator))  # can raise StopIteration error
         except StopIteration:
-            break
-        else:  # no StopIteration error
+            return  # In a generator function, the return statement indicates that the generator is done and
+            # will cause StopIteration to be raised.
+        else:
             yield func(*arguments)
-    # raise StopIteration  ## imaginary statement for generator function my_map
 
 
 if __name__ == '__main__':
@@ -67,7 +68,7 @@ if __name__ == '__main__':
     builtin_map_instance = map(get_total, list_1, list_2, list_3)     # built-in map class usage, returns an iterator
     print('__next__' in dir(builtin_map_instance))  # True, built-in map returns a generator, which is an iterator
     print('__iter__' in dir(builtin_map_instance))  # True, built-in map iterator is an iterable
-    print(builtin_map_instance == iter(builtin_map_instance)) # True, map instance returns itself as iterator
+    print(builtin_map_instance == iter(builtin_map_instance))  # True, map instance returns itself as iterator
     print(list(builtin_map_instance))
 
     my_map_generator = my_map(get_total, list_1, list_2, list_3)  # own my_map usage
