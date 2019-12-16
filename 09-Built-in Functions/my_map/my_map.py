@@ -1,5 +1,5 @@
 def get_total(*args):
-    print(f'inside get_total() and *args are: {args}')
+    # print(f'inside get_total() and *args are: {args}')
     for arg in args:
         if type(arg) != int:
             msg = f'Expected int argument, got {type(arg)} argument'
