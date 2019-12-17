@@ -1,8 +1,15 @@
 import unittest
-from my_zip import my_zip
-from my_zip import MyZip
+from my_zip import my_zip, MyZip
+
 
 class MyZipGeneratorFunctionTest(unittest.TestCase):
+    def test_non_iterables_passed(self):
+        with self.assertRaises(TypeError):
+            iterator= zip(1, 2, 3)
+        with self.assertRaises(TypeError):
+            iterator = my_zip(1, 2, 3)
+            next(iterator)
+
     def test_empty_args(self):
         iterator = my_zip()  # must return an empty iterator
         with self.assertRaises(StopIteration):
@@ -38,6 +45,12 @@ class MyZipGeneratorFunctionTest(unittest.TestCase):
 
 
 class MyZipClassTest(unittest.TestCase):
+    def test_non_iterables_passed(self):
+        with self.assertRaises(TypeError):
+            iterator= zip(1, 2, 3)
+        with self.assertRaises(TypeError):
+            iterator = MyZip(1, 2, 3)
+
     def test_empty_args(self):
         iterator = MyZip()  # must return an empty iterator
         with self.assertRaises(StopIteration):
