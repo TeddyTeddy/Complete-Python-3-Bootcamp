@@ -1,43 +1,39 @@
+class MyFilter(object):
+    """
+    @overload def filter(__function: (_T) -> Any,
+               __iterable: Iterable[_T]) -> Iterator[_T]
+    Possible types:
+    • (__function: None, __iterable: Iterable[Optional[_T]]) -> Iterator[_T]
+    • (__function: (_T) -> Any, __iterable: Iterable[_T]) -> Iterator[_T]
 
+    MyFilter(function or None, iterable) --> filter object
 
-# @overload def filter(__function: (_T) -> Any,
-#            __iterable: Iterable[_T]) -> Iterator[_T]
-# Possible types:
-# • (__function: None, __iterable: Iterable[Optional[_T]]) -> Iterator[_T]
-# • (__function: (_T) -> Any, __iterable: Iterable[_T]) -> Iterator[_T]
-# filter(function or None, iterable) –> filter object
-# Return an iterator yielding those items of iterable for which function(item) is true.
-# If function is None, return the items that are true
-class MyFilter:
-    def __init__(self, function_or_none, iterable):
+    Return an iterator yielding those items of iterable for which function(item)
+    is true. If function is None, return the items that are true.
+    """
+    def __init__(self, func, iterable):
         if not hasattr(iterable, '__iter__'):
-            msg = f' {type(iterable)} object is not iterable'
-            raise TypeError(msg)
+            raise TypeError(f'{type(iterable)} object is not iterable')
 
-        self._function_or_none = function_or_none
+        self._func = func
         self._iterator = iter(iterable)
 
     def __iter__(self):
-        return self  # returns itself as its own iterator
+        return self     # MyFilter is an iterable and its own iterator
 
-    def __next__(self):  # MyFilter instance is an iterator
-        if self._function_or_none is not None:
-            # then it must be a callable
-            if not callable(self._function_or_none):
-                msg = f'{type(self._function_or_none)} object is not callable'
-                raise TypeError(msg)
+    def __next__(self):
+        if self._func is not None and not callable(self._func):
+            raise TypeError(f'{type(self._func)} object is not callable')
 
-            # self.function_or_none is a callable (i.e. a function)
+        if self._func is None:  # If function is None, return the items that are true
             while True:
-                item = next(self._iterator)  # can throw StopIteration error
-                filtering_decision = self._function_or_none(item)
-                if filtering_decision is True:
-                    return item  # item will be filtered out into the result
-        else:  # self._function_or_none is None
-            # if the function is None, return the items that are true
-            while True:
-                item = next(self._iterator)  # can throw StopIteration error
+                item = next(self._iterator)  # can raise StopIteration error
                 if item:
+                    return item
+        else:  # function is not None
+            while True:
+                item = next(self._iterator)  # can raise StopIteration error
+                if self._func(item):
                     return item
 
 
