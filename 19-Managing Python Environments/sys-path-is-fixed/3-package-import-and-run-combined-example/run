@@ -1,0 +1,65 @@
+#!/bin/bash
+PYTHONPATH='/some/path'
+export PYTHONPATH
+echo python -m my_package
+python -m my_package
+
+# Reference: https://stackoverflow.com/questions/61144279/python-execution-order-in-executable-directory
+# Lesson learned:
+# When invoking a package (e.g. python -m my_package), Python does in the given order:
+# 1. If __init__.py exists, Python imports it
+# 2. If __main__.py exists, Python runs it
+#
+# Python will look first for a package (i.e. folder) under the current directory.
+# once it finds the package;  it forms the sys.path as follows:
+#
+#	(a) sys.path[0] always includes the path of the package invoked on the command line and is agnostic to the
+#       working directory on the command line
+#   (b) If PYTHONPATH environment variable exists, its values seperated by : (in Mac, Linux)
+#       or ; (in Windows) are added to sys.path[i] respectively, where i=1 .. n where n is the number of values
+#   (c) default sys.path locations, including remaining Python Standard Library modules which are not built-in.
+#       this depends on the Python build installed. For example, for Python 3.7 build:
+#        '/home/hakan/anaconda3/lib/python37.zip',
+#        '/home/hakan/anaconda3/lib/python3.7',
+#       '/home/hakan/anaconda3/lib/python3.7/lib-dynload
+#    (d) If any, active virtual environment's site-packages directory. For example:
+#       '/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/.venv/lib/python3.7/site-
+#        packages'
+#
+# At this stage, Python has set the system path ready and we are about to invoke my_package.
+# Python then
+# 1. imports __init__.py, which sets __name__ to 'my_package' and passes sys.path to __init__.py being executed from top to bottom;
+#    which then imports modules a and b in the package for the first time
+#    (a) Importing module a for the first time causes Python to pass sys.path and to set __name__ to 'my_package.a'.
+#        Then module a is run from top to bottom creating the module's namespace
+#    (b) Importing module b for the first time causes Python to pass sys.path and to set __name__ to 'my_package.b'.
+#        Then module b is run from top to bottom creating the module's namespace
+# 2. By setting __name__ to '__main__' and passing sys.path, then __main__.py is run from top to bottom;
+#    Note that like __init__.py, __main__.py also imports modules a and b. Since their namespace (i.e. symbol table) are already
+#    created in (1a) and (1b), Python does not run these modules second time. When __main__.py utilizes:
+#
+#	a.module_a_function()
+#	b.module_b_function()
+#
+#   It directly looks for a's and b's namespace to resolve the functions (use print(dir(a)) to see the namespace of a)
+# Below given the outcome of executing this script:
+#
+# (.venv) hakan@hakan-VirtualBox ~/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/sys-path-is-fixed/3-package-import-and-run-combined-example (master)$ ./run
+# python -m my_package
+# my-package __init__.py: with __name__: my_package
+# my-package __init__.py: with sys.path (shared across all imported modules): ['/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/sys-path-is-fixed/3-package-import-and-run-combined-example', '/some/path', '/home/hakan/anaconda3/lib/python37.zip', '/home/hakan/anaconda3/lib/python3.7', '/home/hakan/anaconda3/lib/python3.7/lib-dynload', '/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/.venv/lib/python3.7/site-packages']
+# my-package a.py: with __name__: my_package.a
+# my-package a.py: with sys.path (shared across all imported modules): ['/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/sys-path-is-fixed/3-package-import-and-run-combined-example', '/some/path', '/home/hakan/anaconda3/lib/python37.zip', '/home/hakan/anaconda3/lib/python3.7', '/home/hakan/anaconda3/lib/python3.7/lib-dynload', '/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/.venv/lib/python3.7/site-packages']
+# --------------------------------------
+# my-package b.py: with __name__: my_package.b
+# my-package b.py: with sys.path (shared across all imported modules): ['/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/sys-path-is-fixed/3-package-import-and-run-combined-example', '/some/path', '/home/hakan/anaconda3/lib/python37.zip', '/home/hakan/anaconda3/lib/python3.7', '/home/hakan/anaconda3/lib/python3.7/lib-dynload', '/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/.venv/lib/python3.7/site-packages']
+# --------------------------------------
+# --------------------------------------
+# my-package __main__.py: with __name__: __main__
+# my-package __main__.py: with sys.path (shared across all imported modules): ['/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/sys-path-is-fixed/3-package-import-and-run-combined-example', '/some/path', '/home/hakan/anaconda3/lib/python37.zip', '/home/hakan/anaconda3/lib/python3.7', '/home/hakan/anaconda3/lib/python3.7/lib-dynload', '/home/hakan/Python/Complete-Python-3-Bootcamp/19-Managing Python Environments/.venv/lib/python3.7/site-packages']
+# --------------------------------------
+# package variable text
+# package function got called
+# module_a_function() got called
+# module_b_function() got called
+# """

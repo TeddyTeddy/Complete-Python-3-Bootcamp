@@ -1,0 +1,7 @@
+#!/bin/bash
+echo python -m a2
+python -m a2
+# relative importing in a module (i.e. a2) when executing the module wont work
+# Python will throw ImportError : Attempted relative import with no known parent package
+# https://stackoverflow.com/questions/60593604/importerror-attempted-relative-import-with-no-known-parent-package
+

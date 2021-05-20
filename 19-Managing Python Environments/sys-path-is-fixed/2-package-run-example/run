@@ -1,0 +1,6 @@
+#!/bin/bash
+echo python -m my_package
+python -m my_package
+# Python will look first for a package (i.e. folder) under the current directory.
+# once it finds the package, it adds its path sys.path[0]
+# Python then executes (no importing) the package's __main__.py passing sys.path

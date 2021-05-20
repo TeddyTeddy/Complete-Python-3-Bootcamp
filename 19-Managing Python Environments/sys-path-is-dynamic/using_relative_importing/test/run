@@ -1,0 +1,3 @@
+#!/bin/bash
+echo python -m start
+python -m start
